@@ -1,0 +1,45 @@
+
+<!doctype html>
+<html>
+<head>
+  <title>{% block title %}Location Mapper{% endblock %}</title>
+<!--   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.0/css/all.css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Merriweather" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/styles.css"> -->
+</head>
+
+<body>
+
+{% block nav %}
+{% endblock %}
+
+{% block subtitle%}
+ <div id="subtitle">
+  Map those places!
+
+    <ul>
+      {% for message in get_flashed_messages() %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+
+    <hr>
+  </div>
+  {% endblock %}
+
+  {% block content %} put your content here {% endblock %}
+
+  <footer>
+    <br> 
+    <small>Lena Ireland 2019. Lena is a Software Engineer in the Bay Area.
+    Visit her on<a href="http://www.linkedin.com/in/lenaireland" class="footer-link">LinkedIn</a> and<a href="https://github.com/lenaireland" class="footer-link">Github</a>.</small>
+  </footer>
+  
+  <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> -->
+<!--   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> -->
+
+</body>
+</html>

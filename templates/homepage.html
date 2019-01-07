@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid" id="home-background">
+  <div class="home-main">
+    <h1><div id="home-title">Map those places!</div></h1>
+  </div>
+  
+<div class="container-fluid">
+<!--   <h2>Update your settings</h2> -->
+
+  <p>
+    <form action="/process-url" method="GET">
+      Website to plot locations: 
+      <input type="text" name="url" required>
+      <br><br>
+      <input type="submit" value="Submit" class="btn btn-primary">
+    </form>
+  </p>
+
+</div>
+
+<div class="container-fluid">
+  <div class="row" id="home-about">
+    Location mapper is a tool that lets users scrape an entered url and generate
+    a map with plotted locations of all city, state pairs found on the website.
+  </div>
+</div>
+
+
+{% endblock %}
