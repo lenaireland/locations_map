@@ -15,6 +15,8 @@ app = Flask(__name__)
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = os.environ['SECRET_KEY']
 
+mapbox = os.environ['MAPBOX_KEY']
+
 # AIRNOW = os.environ['AIRNOW_KEY']
 
 
@@ -50,17 +52,17 @@ def url_process():
 
     # eventually will get rid of these lines and return redirect to mapping page
     # doing this way just for debugging
-    
+
     print("\n\n\n\n\n\n\nOUTPUT")
     print(out)
 
-    return redirect('/')
+    return redirect('/map')
     
 
 @app.route('/map')
 def make_map():
 
-    pass
+    return render_template('map.html', mapbox = mapbox)
 
 
 ##############################################################################
