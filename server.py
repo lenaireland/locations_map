@@ -9,6 +9,7 @@ from flask import flash, session, request, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 
 from bs4 import BeautifulSoup
+from mapbox import Geocoder
 
 app = Flask(__name__)
 
@@ -31,9 +32,9 @@ def index():
 
     return render_template('homepage.html')
 
-@app.route('/process-url', methods=['GET'])
-def url_process():
-    """Find locations to map"""
+@app.route('/map', methods=['GET'])
+def make_map():
+    """Find locations to map and send them to map page"""
 
     page_link = request.args.get('url')
 
@@ -50,19 +51,32 @@ def url_process():
     if out == []:
         out = soup.find_all(text=re.compile("(?:,)([^,]+),\s(AL|AK|AS|AZ|AR|CA|CO|CT|DE|DC|FM|FL|GA|GU|HI|ID|IL|IN|IA|KS|KY|LA|ME|MH|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|MP|OH|OK|OR|PW|PA|PR|RI|SC|SD|TN|TX|UT|VT|VI|VA|WA|WV|WI|WY)\s(?:(\d{5}))?"))  
 
-    # eventually will get rid of these lines and return redirect to mapping page
+    # eventually will get rid of these lines
     # doing this way just for debugging
 
-    print("\n\n\n\n\n\n\nOUTPUT")
-    print(out)
+    # print("\n\n\n\n\n\n\nOUTPUT")
+    # print(out)
 
-    return redirect('/map')
-    
+    geocoder = Geocoder(access_token=mapbox)
 
-@app.route('/map')
-def make_map():
+    for_plotting = []
 
-    return render_template('map.html', mapbox = mapbox)
+    for place in out:
+
+        response = geocoder.forward(place, 
+                                    limit = 1, 
+                                    country=['us']) 
+                                    # types=['place'])
+
+        first = response.geojson()['features'][0]
+        # print(first['place_name'])
+        # print(first['geometry']['coordinates'])
+
+        for_plotting.append([first['place_name'], first['geometry']['coordinates']])
+
+    # places = jsonify(for_plotting)
+
+    return render_template('map.html', mapbox = mapbox, places=for_plotting)
 
 
 ##############################################################################

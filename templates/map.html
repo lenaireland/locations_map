@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div><a href="/">Map Another Site!</a></div>
 
 <div id='map'></div>
 
@@ -9,44 +10,64 @@
 // need to use "|tojson" to make jinja variable a string!
 mapboxgl.accessToken = {{ mapbox|tojson }};
 
-var map = new mapboxgl.Map({
+const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/light-v9',
   center: [-96, 37.8],
   zoom: 3
 });
 
-var geojson = {
+let geojson = {
   type: 'FeatureCollection',
-  features: [{
-    type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates: [-77.032, 38.913]
-    },
-    properties: {
-      title: 'Mapbox',
-      description: 'Washington, D.C.'
-    }
-  },
-  {
-    type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates: [-122.414, 37.776]
-    },
-    properties: {
-      title: 'Mapbox',
-      description: 'San Francisco, California'
-    }
-  }]
+  features: []
+  // features: [{
+  //   type: 'Feature',
+  //   geometry: {
+  //     type: 'Point',
+  //     coordinates: [-77.032, 38.913]
+  //   },
+  //   properties: {
+  //     title: 'Mapbox',
+  //     description: 'Washington, D.C.'
+  //   }
+  // },
+  // {
+  //   type: 'Feature',
+  //   geometry: {
+  //     type: 'Point',
+  //     coordinates: [-122.414, 37.776]
+  //   },
+  //   properties: {
+  //     title: 'Mapbox',
+  //     description: 'San Francisco, California'
+  //   }
+  // }]
 };
+
+let places = {{ places|tojson }}
+// console.log(places)
+
+for (let place of places) {
+  // console.log(place[0])
+  // console.log(place[1])
+  geojson.features.push({
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: place[1]
+    },
+    properties: {
+      title: 'Site Place',
+      description: place[0]
+    }
+  })
+}
 
 // add markers to map
 geojson.features.forEach(function(marker) {
 
   // create a HTML element for each feature
-  var el = document.createElement('div');
+  const el = document.createElement('div');
   el.className = 'marker';
 
   // make a marker for each feature and add to the map
