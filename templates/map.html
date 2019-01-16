@@ -1,9 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div><a href="/">Map Another Site!</a></div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="page-header"><a href="/">Map Another Site</a>
+    </div>
+  </div>
+  <div class="row">
 
-<div id='map'></div>
+<!-- Need to get iframe working to have website on one side and plotted locations on other -->
+<!-- Currently map plots over other items on page -->
+
+<!--     <div class="col-8">
+    </div>
+    <div class="col-4"> -->
+      <div class="container-fluid" id='map'>
+      </div>
+<!--     </div> -->
+  </div>
+</div>
+
 
 <script>
 
@@ -20,36 +36,12 @@ const map = new mapboxgl.Map({
 let geojson = {
   type: 'FeatureCollection',
   features: []
-  // features: [{
-  //   type: 'Feature',
-  //   geometry: {
-  //     type: 'Point',
-  //     coordinates: [-77.032, 38.913]
-  //   },
-  //   properties: {
-  //     title: 'Mapbox',
-  //     description: 'Washington, D.C.'
-  //   }
-  // },
-  // {
-  //   type: 'Feature',
-  //   geometry: {
-  //     type: 'Point',
-  //     coordinates: [-122.414, 37.776]
-  //   },
-  //   properties: {
-  //     title: 'Mapbox',
-  //     description: 'San Francisco, California'
-  //   }
-  // }]
 };
 
 let places = {{ places|tojson }}
-// console.log(places)
 
+// add each place to the geojson object
 for (let place of places) {
-  // console.log(place[0])
-  // console.log(place[1])
   geojson.features.push({
     type: 'Feature',
     geometry: {

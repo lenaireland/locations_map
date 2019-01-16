@@ -51,12 +51,13 @@ def make_map():
     if out == []:
         out = soup.find_all(text=re.compile("(?:,)([^,]+),\s(AL|AK|AS|AZ|AR|CA|CO|CT|DE|DC|FM|FL|GA|GU|HI|ID|IL|IN|IA|KS|KY|LA|ME|MH|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|MP|OH|OK|OR|PW|PA|PR|RI|SC|SD|TN|TX|UT|VT|VI|VA|WA|WV|WI|WY)\s(?:(\d{5}))?"))  
 
-    # eventually will get rid of these lines
-    # doing this way just for debugging
 
+    # for debugging
     # print("\n\n\n\n\n\n\nOUTPUT")
     # print(out)
 
+    # Can comment out these lines and uncomment last lines 
+    # to dummy out geocode call and save API quota
     geocoder = Geocoder(access_token=mapbox)
 
     for_plotting = []
@@ -74,9 +75,15 @@ def make_map():
 
         for_plotting.append([first['place_name'], first['geometry']['coordinates']])
 
-    # places = jsonify(for_plotting)
+    return render_template('map.html', mapbox = mapbox, places=for_plotting, link=page_link)
+    
 
-    return render_template('map.html', mapbox = mapbox, places=for_plotting)
+    # Uncomment these lines to dummy out API call and save quota
+
+    # places = ['1105 Hainesport Mount Laurel Rd, Mount Laurel, New Jersey 08054, United States',
+    #           [-74.87109, 39.95182]]
+
+    # return render_template('map.html', mapbox=mapbox, places=places, link=page_link)
 
 
 ##############################################################################
