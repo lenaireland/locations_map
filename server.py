@@ -32,8 +32,8 @@ def index():
 
     return render_template('homepage.html')
 
-@app.route('/map', methods=['GET'])
-def make_map():
+@app.route('/results', methods=['GET'])
+def show_results():
     """Find locations to map and send them to map page"""
 
     page_link = request.args.get('url')
@@ -58,33 +58,38 @@ def make_map():
 
     # Can comment out these lines and uncomment last lines 
     # to dummy out geocode call and save API quota
-    geocoder = Geocoder(access_token=mapbox)
 
-    for_plotting = []
+    # geocoder = Geocoder(access_token=mapbox)
 
-    for place in out:
+    # for_plotting = []
 
-        response = geocoder.forward(place, 
-                                    limit = 1, 
-                                    country=['us']) 
-                                    # types=['place'])
+    # for place in out:
 
-        first = response.geojson()['features'][0]
-        # print(first['place_name'])
-        # print(first['geometry']['coordinates'])
+    #     response = geocoder.forward(place, 
+    #                                 limit = 1, 
+    #                                 country=['us']) 
+    #                                 # types=['place'])
 
-        for_plotting.append([first['place_name'], first['geometry']['coordinates']])
+    #     first = response.geojson()['features'][0]
+    #     # print(first['place_name'])
+    #     # print(first['geometry']['coordinates'])
 
-    return render_template('map.html', mapbox = mapbox, places=for_plotting, link=page_link)
+    #     for_plotting.append([first['place_name'], first['geometry']['coordinates']])
+
+    # return render_template('map.html', mapbox = mapbox, places=for_plotting, link=page_link)
     
 
     # Uncomment these lines to dummy out API call and save quota
 
-    # places = ['1105 Hainesport Mount Laurel Rd, Mount Laurel, New Jersey 08054, United States',
-    #           [-74.87109, 39.95182]]
+    places = ['1105 Hainesport Mount Laurel Rd, Mount Laurel, New Jersey 08054, United States',
+              [-74.87109, 39.95182]]
 
-    # return render_template('map.html', mapbox=mapbox, places=places, link=page_link)
+    return render_template('results.html', mapbox=mapbox, places=places, link=page_link)
 
+@app.route('/map')
+def map():
+
+    return render_template('map.html')
 
 ##############################################################################
 
