@@ -3,8 +3,34 @@ body {
   padding: 0;
 }
 
-.page-header {
-  position: absolute;
+.btn-primary {
+    background: white;
+    color: #353535;
+    border-color: #70A0AF;
+}
+
+.btn-primary:hover {
+    background: #DEE5E5;
+    color: #353535;
+    border-color: #70A0AF;    
+}
+
+#site-return {
+  margin: 10px;
+}
+
+#webcol {
+  padding: 0;
+  border-style: solid;
+  border-width: 1px 1px 1px 1px;
+  border-color: gray;
+}
+
+#mapcol {
+  padding: 0;
+  border-style: solid;
+  border-width: 1px 1px 1px 0px;
+  border-color: gray;
 }
 
 #map {

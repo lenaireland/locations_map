@@ -1,75 +1,74 @@
-{% extends 'base.html' %}
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8' />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <!-- Mapbox GL JS and CSS -->
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css' rel='stylesheet' />
+  <!-- Geocoder plugin -->
+<!--   <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.js'></script>
+  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.css' type='text/css' /> -->
+  <!-- Turf.js plugin -->
+<!--   <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script> -->
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
 
-{% block content %}
-<div class="container-fluid">
-  <div class="row">
-    <div class="page-header"><a href="/">Map Another Site</a>
-    </div>
-  </div>
-  <div class="row">
+<body>
+  <div id='map'></div>
 
-<!-- Need to get iframe working to have website on one side and plotted locations on other -->
-<!-- Currently map plots over other items on page -->
+  <script>
 
-<!--     <div class="col-8">
-    </div>
-    <div class="col-4"> -->
-      <div class="container-fluid" id='map'>
-      </div>
-<!--     </div> -->
-  </div>
-</div>
+  // need to use "|tojson" to make jinja variable a string!
+  mapboxgl.accessToken = {{ mapbox|tojson }};
 
+  const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/light-v9',
+    center: [-96, 37.8],
+    zoom: 2
+  });
 
-<script>
+  let geojson = {
+    type: 'FeatureCollection',
+    features: []
+  };
 
-// need to use "|tojson" to make jinja variable a string!
-mapboxgl.accessToken = {{ mapbox|tojson }};
+  let places = {{ places|tojson }}
 
-const map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/mapbox/light-v9',
-  center: [-96, 37.8],
-  zoom: 3
-});
+  // add each place to the geojson object
+  for (let place of places) {
+    geojson.features.push({
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: place[1]
+      },
+      properties: {
+        title: 'Site Place',
+        description: place[0]
+      }
+    })
+  }
 
-let geojson = {
-  type: 'FeatureCollection',
-  features: []
-};
+  // add markers to map
+  geojson.features.forEach(function(marker) {
 
-let places = {{ places|tojson }}
+    // create a HTML element for each feature
+    const el = document.createElement('div');
+    el.className = 'marker';
 
-// add each place to the geojson object
-for (let place of places) {
-  geojson.features.push({
-    type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates: place[1]
-    },
-    properties: {
-      title: 'Site Place',
-      description: place[0]
-    }
-  })
-}
+    // make a marker for each feature and add to the map
+    new mapboxgl.Marker(el)
+    .setLngLat(marker.geometry.coordinates)
+    .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+    .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+    .addTo(map);
+  });
 
-// add markers to map
-geojson.features.forEach(function(marker) {
+  </script>
 
-  // create a HTML element for each feature
-  const el = document.createElement('div');
-  el.className = 'marker';
-
-  // make a marker for each feature and add to the map
-  new mapboxgl.Marker(el)
-  .setLngLat(marker.geometry.coordinates)
-  .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-  .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
-  .addTo(map);
-});
-
-</script>
-
-{% endblock %}
+</body>
+</html>
