@@ -17,7 +17,7 @@ __API:__ Mapbox <br/>
 
 ## <a name="features"></a>Features
 
-This is a simple little webapp that scrapes a webpage using BeautifulSopu and returns a new page with side-by-side iframes of the original webpage and a map showing any US locations recognized on the original webpage.
+This is a simple little webapp that scrapes a webpage using BeautifulSoup and returns a new page with side-by-side iframes of the original webpage and a map showing any US locations recognized on the original webpage.
 
 ## <a name="installation"></a>Setup/Installation
 
